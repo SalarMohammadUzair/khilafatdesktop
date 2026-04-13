@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import './AjrakBackground.css';
-
+/* Stop SNOOPING around man */
 function AjrakBackground() {
   return (
     <div className="ajrak-bg">

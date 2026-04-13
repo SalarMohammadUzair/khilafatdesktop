@@ -39,7 +39,7 @@
   border-color: rgba(255, 255, 255, 0.04);
 }
 
-/* ── Title bar ────────────────────────────────────────────────── */
+/* Title bar  */
 .win-titlebar {
   display: flex;
   align-items: center;
@@ -88,7 +88,7 @@
   color: #f0f0f0;
 }
 
-/* ── Window controls ──────────────────────────────────────────── */
+/* Window controls  */
 .win-controls {
   display: flex;
   gap: 0;

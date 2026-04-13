@@ -11,7 +11,7 @@
   overflow: hidden;
 }
 
-/* ── Navigation bar ──────────────────────────────────────────── */
+/* Navigation bar  */
 .fe-navbar {
   display: flex;
   align-items: center;
@@ -45,7 +45,7 @@
 .fe-nav-btn:hover:not(:disabled) { background: #1f1f1f; }
 .fe-nav-btn:disabled { color: #444; cursor: default; }
 
-/* ── Address / Breadcrumb bar ────────────────────────────────── */
+/* Address  bar */
 .fe-addressbar-wrap { flex: 1; min-width: 0; }
 
 .fe-breadcrumb-bar,
@@ -108,7 +108,7 @@
 
 .fe-addr-input:focus { border-color: #89b4fa; }
 
-/* ── Search ──────────────────────────────────────────────────── */
+/* Search  */
 .fe-search-wrap {
   display: flex;
   align-items: center;
@@ -135,14 +135,14 @@
 
 .fe-search-input::placeholder { color: #666; }
 
-/* ── Body: sidebar + main ────────────────────────────────────── */
+/* Body: sidebar + main  */
 .fe-body {
   display: flex;
   flex: 1;
   min-height: 0;
 }
 
-/* ── Sidebar ─────────────────────────────────────────────────── */
+/* Sidebar  */
 .fe-sidebar {
   width: 190px;
   min-width: 190px;
@@ -201,7 +201,7 @@
   margin: 10px 8px;
 }
 
-/* ── Main content area ───────────────────────────────────────── */
+/* Main content area  */
 .fe-main {
   flex: 1;
   min-width: 0;
@@ -216,7 +216,7 @@
 .fe-main::-webkit-scrollbar-track { background: transparent; }
 .fe-main::-webkit-scrollbar-thumb { background: #555; border-radius: 999px; }
 
-/* ── File list table ─────────────────────────────────────────── */
+/* File list table  */
 .fe-list {
   width: 100%;
   border-collapse: collapse;
@@ -268,7 +268,7 @@
   background: #1e2a3a;
 }
 
-/* ── Empty state ─────────────────────────────────────────────── */
+/* Empty state  */
 .fe-empty {
   display: flex;
   align-items: center;
@@ -278,7 +278,7 @@
   font-size: 14px;
 }
 
-/* ── Status bar ──────────────────────────────────────────────── */
+/* Status bar  */
 .fe-statusbar {
   height: 30px;
   padding: 0 14px;
@@ -294,7 +294,7 @@
 
 .fe-statusbar-panel { padding: 0 4px; }
 
-/* ── Responsive ──────────────────────────────────────────────── */
+/* Responsive  */
 @media (max-width: 800px) {
   .fe-search-wrap { width: 140px; }
   .fe-sidebar { width: 150px; min-width: 150px; }

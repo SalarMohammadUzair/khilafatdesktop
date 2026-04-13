@@ -1,4 +1,4 @@
-/* ── Desktop ──────────────────────────────────────────────────── */
+/*  Desktop  */
 .desktop {
   position: fixed;
   inset: 0;
@@ -25,7 +25,7 @@
   align-content: flex-start;
 }
 
-/* ── Desktop Icon ─────────────────────────────────────────────── */
+/* Desktop Icon  */
 .desktop-icon {
   display: flex;
   flex-direction: column;
@@ -80,7 +80,7 @@
   -webkit-box-orient: vertical;
 }
 
-/* ── Taskbar ──────────────────────────────────────────────────── */
+/* Taskbar  */
 .taskbar {
   height: 48px;
   display: flex;
@@ -130,7 +130,7 @@
   justify-content: flex-end;
 }
 
-/* ── Taskbar buttons ──────────────────────────────────────────── */
+/* Taskbar buttons  */
 .taskbar-icon-btn {
   display: flex;
   align-items: center;
@@ -176,7 +176,7 @@
   box-shadow: 0 0 8px rgba(137, 180, 250, 0.5);
 }
 
-/* ── Taskbar Clock ────────────────────────────────────────────── */
+/* Taskbar Clock  */
 .taskbar-clock {
   display: flex;
   flex-direction: column;

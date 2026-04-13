@@ -8,7 +8,7 @@ function Taskbar({ windows = [], activeWinId, onFocus, onOpenApp }) {
   return (
     <div className="taskbar">
       <div className="taskbar-left">
-        <span className="taskbar-brand">KhilafatOS</span>
+        <span className="taskbar-brand">KhilafatDesktop</span>
       </div>
 
       <div className="taskbar-center">

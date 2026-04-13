@@ -1,4 +1,4 @@
-// ─── Khilafat Members ──────────────────────────────────────────────
+// Khilafat Members 
 export const MEMBERS = [
   {
     id: 'salar',
@@ -26,7 +26,7 @@ export const MEMBERS = [
   },
 ];
 
-// ─── Khilafat Works (group folder) ─────────────────────────────────
+// Khilafat Works (group folder) 
 export const KHILAFAT_WORKS = {
   id: 'khilafatworks',
   name: 'Khilafat Works',
@@ -34,9 +34,9 @@ export const KHILAFAT_WORKS = {
   folderImage: 'khilafatworks',
 };
 
-// ─── Projects ──────────────────────────────────────────────────────
+// Projects 
 export const PROJECTS = [
-  // ── Salar ────────────────────────────────────────────────────────
+  // Salar 
   {
     id: 'canilisten',
     memberId: 'salar',
@@ -56,7 +56,7 @@ export const PROJECTS = [
     date: '2026-04-13',
   },
 
-  // ── Grandgambler ─────────────────────────────────────────────────
+  // Grandgambler 
   {
     id: 'studytracker',
     memberId: 'grandgambler',
@@ -85,7 +85,7 @@ export const PROJECTS = [
     date: '2026-04-13',
   },
 
-  // ── Shah Man ─────────────────────────────────────────────────────
+  // Shah Man 
   {
     id: 'sm-project-1',
     memberId: 'shahman',
@@ -96,7 +96,7 @@ export const PROJECTS = [
     date: '2026-04-13',
   },
 
-  // ── Khilafat Works (group projects) ──────────────────────────────
+  //  Khilafat Works (group projects) 
   {
     id: 'khilafat-site',
     memberId: 'khilafatworks',
