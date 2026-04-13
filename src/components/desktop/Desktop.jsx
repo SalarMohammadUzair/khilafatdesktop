@@ -3,7 +3,6 @@ import DesktopIcon from './DesktopIcon';
 import Taskbar from './Taskbar';
 import AjrakBackground from './AjrakBackground';
 import { MEMBERS, KHILAFAT_WORKS } from '../../data/projects';
-import { MdInfo } from 'react-icons/md';
 import './desktop.css';
 
 // Folder images
@@ -42,12 +41,6 @@ function Desktop({ openWindows = [], activeWinId, onOpenApp, onFocus }) {
         <img src={FOLDER_IMAGES[KHILAFAT_WORKS.id]} alt={KHILAFAT_WORKS.name} width={52} height={52} draggable={false} style={{ objectFit: 'contain' }} />
       ),
       action: () => onOpenApp?.('file-explorer', { initialPath: `/${KHILAFAT_WORKS.name}` }),
-    },
-    {
-      id: 'about',
-      label: 'About Khilafat',
-      icon: <MdInfo size={36} color="#89b4fa" />,
-      action: () => {},
     },
   ];
 
