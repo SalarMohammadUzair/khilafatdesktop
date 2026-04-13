@@ -1,11 +1,12 @@
 import { useState, useCallback, memo } from 'react';
 import DesktopIcon from './DesktopIcon';
 import Taskbar from './Taskbar';
+import AjrakBackground from './AjrakBackground';
 import { MEMBERS, KHILAFAT_WORKS } from '../../data/projects';
 import { MdInfo } from 'react-icons/md';
 import './desktop.css';
 
-// Import folder images
+// Folder images
 import salarFolder from '../../assets/folders/salar.png';
 import grandgamblerFolder from '../../assets/folders/grandgambler.png';
 import shahmanFolder from '../../assets/folders/shahman.png';
@@ -30,7 +31,7 @@ function Desktop({ openWindows = [], activeWinId, onOpenApp, onFocus }) {
       id: m.id,
       label: m.name,
       icon: (
-        <img src={FOLDER_IMAGES[m.id]} alt={m.name} width={56} height={56} draggable={false} style={{ objectFit: 'contain' }} />
+        <img src={FOLDER_IMAGES[m.id]} alt={m.name} width={52} height={52} draggable={false} style={{ objectFit: 'contain' }} />
       ),
       action: () => onOpenApp?.('file-explorer', { initialPath: `/${m.name}` }),
     })),
@@ -38,21 +39,21 @@ function Desktop({ openWindows = [], activeWinId, onOpenApp, onFocus }) {
       id: KHILAFAT_WORKS.id,
       label: KHILAFAT_WORKS.name,
       icon: (
-        <img src={FOLDER_IMAGES[KHILAFAT_WORKS.id]} alt={KHILAFAT_WORKS.name} width={56} height={56} draggable={false} style={{ objectFit: 'contain' }} />
+        <img src={FOLDER_IMAGES[KHILAFAT_WORKS.id]} alt={KHILAFAT_WORKS.name} width={52} height={52} draggable={false} style={{ objectFit: 'contain' }} />
       ),
       action: () => onOpenApp?.('file-explorer', { initialPath: `/${KHILAFAT_WORKS.name}` }),
     },
+    {
+      id: 'about',
+      label: 'About Khilafat',
+      icon: <MdInfo size={36} color="#89b4fa" />,
+      action: () => {},
+    },
   ];
-
-  desktopItems.push({
-    id: 'about',
-    label: 'About Khilafat',
-    icon: <MdInfo size={40} color="#89b4fa" />,
-    action: () => {},
-  });
 
   return (
     <div className="desktop" onClick={handleDesktopClick}>
+      <AjrakBackground />
       <div className="desktop-area">
         <div className="desktop-icons">
           {desktopItems.map((item) => (
