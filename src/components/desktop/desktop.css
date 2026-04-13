@@ -1,0 +1,180 @@
+/* ── Desktop ──────────────────────────────────────────────────── */
+.desktop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #0a0a1a 0%, #0d1117 40%, #161b22 100%);
+  overflow: hidden;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+.desktop-area {
+  flex: 1;
+  position: relative;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.desktop-icons {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: calc(100vh - 100px);
+  align-content: flex-start;
+}
+
+/* ── Desktop Icon ─────────────────────────────────────────────── */
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 110px;
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease, transform 0.15s ease;
+  gap: 6px;
+}
+
+.desktop-icon:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: scale(1.04);
+}
+
+.desktop-icon:active {
+  transform: scale(0.97);
+}
+
+.desktop-icon.is-selected {
+  background: rgba(137, 180, 250, 0.12);
+  outline: 1px solid rgba(137, 180, 250, 0.3);
+}
+
+.desktop-icon-img {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.desktop-icon-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #e8e8e8;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Taskbar ──────────────────────────────────────────────────── */
+.taskbar {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: rgba(14, 14, 14, 0.85);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid #222;
+  flex-shrink: 0;
+  z-index: 500;
+}
+
+.taskbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 120px;
+}
+
+.taskbar-brand {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #a6e3a1, #89b4fa, #f5c2e7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.taskbar-center {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.taskbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 120px;
+  justify-content: flex-end;
+}
+
+/* ── Taskbar buttons ──────────────────────────────────────────── */
+.taskbar-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 38px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #ccc;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.12s ease;
+}
+
+.taskbar-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.taskbar-icon-btn.is-open::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 3px;
+  border-radius: 2px;
+  background: #666;
+}
+
+.taskbar-icon-btn.is-focused {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.taskbar-icon-btn.is-focused::after {
+  background: #89b4fa;
+  width: 16px;
+}
+
+/* ── Taskbar Clock ────────────────────────────────────────────── */
+.taskbar-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+
+.taskbar-clock-time {
+  font-size: 12px;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+.taskbar-clock-date {
+  font-size: 11px;
+  color: #888;
+}

@@ -1,0 +1,128 @@
+.app-window {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background: rgba(14, 14, 14, 0.95);
+  border: 1px solid #333;
+  border-radius: 8px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  min-width: 300px;
+  min-height: 200px;
+  overflow: hidden;
+  animation: windowFadeIn 0.2s ease-out;
+}
+
+@keyframes windowFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.app-window.is-maximized { border-radius: 0; border: none; }
+.app-window.is-minimized { display: none; }
+
+.app-window:not(.is-active) {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  opacity: 0.92;
+}
+
+/* ── Title bar ────────────────────────────────────────────────── */
+.win-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  height: 40px;
+  flex-shrink: 0;
+  cursor: default;
+  user-select: none;
+  background: #181818;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.win-drag-handle {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  cursor: move;
+  overflow: hidden;
+}
+
+.win-titlebar-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.win-title {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #e8e8e8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Window controls ──────────────────────────────────────────── */
+.win-controls {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.win-ctrl-btn {
+  width: 36px;
+  height: 32px;
+  font-size: 13px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #ccc;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.win-ctrl-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+.win-ctrl-btn:active { transform: translateY(1px); }
+.win-ctrl-btn.close:hover { background: #c42b1c; color: #fff; }
+.win-ctrl-btn svg { display: block; }
+
+/* ── Window body ──────────────────────────────────────────────── */
+.win-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+  background: #0e0e0e;
+  position: relative;
+}
+
+.win-body > * {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Resize handles ───────────────────────────────────────────── */
+.win-resize { position: absolute; z-index: 10; }
+.win-resize-n  { top: 0; left: 6px; right: 6px; height: 4px; cursor: n-resize; }
+.win-resize-s  { bottom: 0; left: 6px; right: 6px; height: 4px; cursor: s-resize; }
+.win-resize-w  { top: 6px; left: 0; bottom: 6px; width: 4px; cursor: w-resize; }
+.win-resize-e  { top: 6px; right: 0; bottom: 6px; width: 4px; cursor: e-resize; }
+.win-resize-nw { top: 0; left: 0; width: 8px; height: 8px; cursor: nw-resize; }
+.win-resize-ne { top: 0; right: 0; width: 8px; height: 8px; cursor: ne-resize; }
+.win-resize-sw { bottom: 0; left: 0; width: 8px; height: 8px; cursor: sw-resize; }
+.win-resize-se { bottom: 0; right: 0; width: 8px; height: 8px; cursor: se-resize; }

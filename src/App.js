@@ -1,24 +1,66 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useCallback } from 'react';
+import { OSProvider } from './context/OSContext';
+import Desktop from './components/desktop/Desktop';
+import WindowManager from './components/window/WindowManager';
+import './index.css';
 
 function App() {
+  const [windows, setWindows] = useState([]);
+  const [activeWinId, setActiveWinId] = useState(null);
+
+  const handleOpenApp = useCallback((appId, launchData = null) => {
+    const id = `${appId}-${Date.now()}`;
+    const newWin = {
+      id,
+      appId,
+      minimized: false,
+      startMaximized: appId === 'project-viewer',
+      title: appId === 'file-explorer'
+        ? 'File Explorer'
+        : launchData?.project?.name || 'Project',
+      initialPath: launchData?.initialPath || '/',
+      project: launchData?.project || null,
+      faviconUrl: launchData?.project?.url
+        ? `https://www.google.com/s2/favicons?domain=${new URL(launchData.project.url).hostname}&sz=32`
+        : null,
+    };
+
+    setWindows((prev) => [...prev, newWin]);
+    setActiveWinId(id);
+  }, []);
+
+  const handleFocus = useCallback((id) => {
+    setActiveWinId(id);
+    setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, minimized: false } : w)));
+  }, []);
+
+  const handleClose = useCallback((id) => {
+    setWindows((prev) => prev.filter((w) => w.id !== id));
+    setActiveWinId((cur) => (cur === id ? null : cur));
+  }, []);
+
+  const handleMinimize = useCallback((id) => {
+    setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, minimized: true } : w)));
+    setActiveWinId((cur) => (cur === id ? null : cur));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <OSProvider>
+      <Desktop
+        openWindows={windows}
+        activeWinId={activeWinId}
+        onOpenApp={handleOpenApp}
+        onFocus={handleFocus}
+      />
+      <WindowManager
+        windows={windows}
+        activeWinId={activeWinId}
+        onOpenApp={handleOpenApp}
+        onFocus={handleFocus}
+        onClose={handleClose}
+        onMinimize={handleMinimize}
+      />
+    </OSProvider>
   );
 }
 
