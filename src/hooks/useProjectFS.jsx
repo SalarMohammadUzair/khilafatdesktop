@@ -11,6 +11,7 @@ export default function useProjectFS() {
       '/': ALL_FOLDERS.map((f) => ({
         id: f.id,
         name: f.name,
+        nameUrdu: f.nameUrdu,
         type: 'folder',
         modified: f.id === 'khilafatworks' ? 'Group' : f.id === 'gallery' ? 'Gallery' : 'Member',
         accent: f.accent,
@@ -20,6 +21,7 @@ export default function useProjectFS() {
       [`/${GALLERY_FOLDER.name}`]: GALLERY_SUBFOLDERS.map((sub) => ({
         id: sub.id,
         name: sub.name,
+        nameUrdu: sub.nameUrdu,
         type: 'folder',
         modified: 'Gallery Subfolder',
         accent: sub.accent,
@@ -35,6 +37,7 @@ export default function useProjectFS() {
       tree[`/${f.name}`] = folderProjects.map((p) => ({
         id: p.id,
         name: p.name,
+        nameUrdu: p.nameUrdu,
         type: 'project',
         projectType: p.type,
         description: p.description,

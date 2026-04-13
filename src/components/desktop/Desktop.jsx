@@ -4,6 +4,7 @@ import Taskbar from './Taskbar';
 import AjrakBackground from './AjrakBackground';
 import ImageWidget from './ImageWidget';
 import { MEMBERS, KHILAFAT_WORKS } from '../../data/projects';
+import { useOS } from '../../context/OSContext';
 import './desktop.css';
 
 // Folder images
@@ -26,6 +27,7 @@ const FOLDER_IMAGES = {
 
 function Desktop({ openWindows = [], activeWinId, onOpenApp, onFocus }) {
   const [selectedIcon, setSelectedIcon] = useState(null);
+  const { language, t } = useOS();
 
   const handleDesktopClick = useCallback(() => {
     setSelectedIcon(null);
@@ -34,7 +36,7 @@ function Desktop({ openWindows = [], activeWinId, onOpenApp, onFocus }) {
   const desktopItems = [
     ...MEMBERS.map((m) => ({
       id: m.id,
-      label: m.name,
+      label: language === 'UR' && m.nameUrdu ? m.nameUrdu : m.name,
       icon: (
         <img src={FOLDER_IMAGES[m.id]} alt={m.name} width={52} height={52} draggable={false} style={{ objectFit: 'contain' }} />
       ),
@@ -42,7 +44,7 @@ function Desktop({ openWindows = [], activeWinId, onOpenApp, onFocus }) {
     })),
     {
       id: KHILAFAT_WORKS.id,
-      label: KHILAFAT_WORKS.name,
+      label: language === 'UR' && KHILAFAT_WORKS.nameUrdu ? KHILAFAT_WORKS.nameUrdu : KHILAFAT_WORKS.name,
       icon: (
         <img src={FOLDER_IMAGES[KHILAFAT_WORKS.id]} alt={KHILAFAT_WORKS.name} width={52} height={52} draggable={false} style={{ objectFit: 'contain' }} />
       ),
@@ -53,6 +55,7 @@ function Desktop({ openWindows = [], activeWinId, onOpenApp, onFocus }) {
   return (
     <div className="desktop" onClick={handleDesktopClick}>
       <AjrakBackground />
+      <div className="desktop-notch">{t('Notch')}</div>
       <div className="desktop-area">
         <div className="desktop-icons">
           {desktopItems.map((item) => (
@@ -70,18 +73,21 @@ function Desktop({ openWindows = [], activeWinId, onOpenApp, onFocus }) {
 
         {/* macOS Style Draggable Image Widgets */}
         <ImageWidget 
+          id="widget1"
           defaultX={window.innerWidth - 320} 
           defaultY={40} 
           imageUrl={widget1} 
           title="Widget 1" 
         />
         <ImageWidget 
+          id="widget2"
           defaultX={window.innerWidth - 320} 
           defaultY={340} 
           imageUrl={widget2} 
           title="Widget 2" 
         />
         <ImageWidget 
+          id="widget3"
           defaultX={window.innerWidth - 640} 
           defaultY={40} 
           imageUrl={widget3} 

@@ -5,6 +5,7 @@ export const MEMBERS = [
   {
     id: 'salar',
     name: 'Salar',
+    nameUrdu: 'سالار',
     role: 'Developer',
     accent: '#a6e3a1',
     github: 'https://github.com/salar',
@@ -13,6 +14,7 @@ export const MEMBERS = [
   {
     id: 'grandgambler',
     name: 'Grandgambler',
+    nameUrdu: 'گرینڈ گیمبلر',
     role: 'Developer',
     accent: '#89b4fa',
     github: 'https://github.com/grandgambler',
@@ -21,6 +23,7 @@ export const MEMBERS = [
   {
     id: 'shahman',
     name: 'Shah Man',
+    nameUrdu: 'شاہ مین',
     role: 'Developer',
     accent: '#f5c2e7',
     github: 'https://github.com/shahman',
@@ -32,6 +35,7 @@ export const MEMBERS = [
 export const KHILAFAT_WORKS = {
   id: 'khilafatworks',
   name: 'Khilafat Works',
+  nameUrdu: 'خلافت ورکس',
   accent: '#f9e2af',
   folderImage: 'khilafatworks',
 };
@@ -40,14 +44,15 @@ export const KHILAFAT_WORKS = {
 export const GALLERY_FOLDER = {
   id: 'gallery',
   name: 'Gallery',
+  nameUrdu: 'گیلری',
   accent: '#cba6f7', // purple accent
 };
 
 // Subfolders inside Gallery
 export const GALLERY_SUBFOLDERS = [
-  { id: 'iqbal', name: 'Allama Iqbal', parent: 'Gallery', accent: '#a6e3a1' },
-  { id: 'salam', name: 'AbdusSalam', parent: 'Gallery', accent: '#89b4fa' },
-  { id: 'israr', name: 'Dr Israr', parent: 'Gallery', accent: '#f5c2e7' },
+  { id: 'iqbal', name: 'Allama Iqbal', nameUrdu: 'علامہ اقبال', parent: 'Gallery', accent: '#a6e3a1' },
+  { id: 'salam', name: 'AbdusSalam', nameUrdu: 'عبدالسلام', parent: 'Gallery', accent: '#89b4fa' },
+  { id: 'israr', name: 'Dr Israr', nameUrdu: 'ڈاکٹر اسرار', parent: 'Gallery', accent: '#f5c2e7' },
 ];
 
 // Media Files inside the Gallery subfolders

@@ -1,8 +1,10 @@
 import { memo, useMemo } from 'react';
 import TaskbarClock from './TaskbarClock';
 import { MdFolder, MdLanguage } from 'react-icons/md';
+import { useOS } from '../../context/OSContext';
 
 function Taskbar({ windows = [], activeWinId, onFocus, onOpenApp }) {
+  const { language, setLanguage, t } = useOS();
   const openAppIds = useMemo(() => new Set(windows.map((w) => w.appId)), [windows]);
 
   return (
@@ -19,7 +21,7 @@ function Taskbar({ windows = [], activeWinId, onFocus, onOpenApp }) {
             windows.some((w) => w.appId === 'file-explorer' && w.id === activeWinId) ? ' is-focused' : ''
           }`}
           onClick={() => onOpenApp?.('file-explorer')}
-          title="File Explorer"
+          title={t('File Explorer')}
         >
           <MdFolder size={22} color="#f0c040" />
         </button>
@@ -62,6 +64,10 @@ function Taskbar({ windows = [], activeWinId, onFocus, onOpenApp }) {
       </div>
 
       <div className="taskbar-right">
+        <div className="lang-toggle" onClick={() => setLanguage(lang => lang === 'EN' ? 'UR' : 'EN')}>
+          <span className={language === 'UR' ? 'is-active' : ''}>UR</span>
+          <span className={language === 'EN' ? 'is-active' : ''}>EN</span>
+        </div>
         <TaskbarClock />
       </div>
     </div>

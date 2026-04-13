@@ -22,7 +22,7 @@ function App() {
       project: launchData?.project || null,
       data: launchData?.data || null,
       faviconUrl: launchData?.project?.url
-        ? `https://www.google.com/s2/favicons?domain=${new URL(launchData.project.url).hostname}&sz=32`
+        ? `https://icon.horse/icon/${new URL(launchData.project.url).hostname}`
         : null,
     };
 

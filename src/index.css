@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap');
 
 /* ── CSS Variables ────────────────────────────────────────────── */
 :root {
@@ -33,6 +34,10 @@ html, body, #root {
   background: var(--bg-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body.lang-ur, body.lang-ur * {
+  font-family: 'Vazirmatn', 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif !important;
 }
 
 /* ── Scrollbar ────────────────────────────────────────────────── */

@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import useProjectFS from '../../../hooks/useProjectFS';
+import { useOS } from '../../../context/OSContext';
 import { MEMBERS, KHILAFAT_WORKS, GALLERY_FOLDER } from '../../../data/projects';
 import { MdArrowBack, MdArrowForward, MdArrowUpward, MdHome, MdSearch, MdPerson, MdWorkspaces, MdPhotoLibrary, MdImage, MdPlayCircle, MdViewList, MdViewModule, MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import './FileExplorer.css';
@@ -37,9 +38,10 @@ function MemberIcon({ accent, size = 18 }) {
 }
 
 function Breadcrumb({ currentPath, onNavigate }) {
+  const { t } = useOS();
   const segments = currentPath === '/' ? [] : currentPath.split('/').filter(Boolean);
   const crumbs = [
-    { label: 'Home', path: '/' },
+    { label: t('Home'), path: '/' },
     ...segments.map((seg, i) => ({
       label: seg,
       path: '/' + segments.slice(0, i + 1).join('/'),
@@ -68,6 +70,7 @@ function Breadcrumb({ currentPath, onNavigate }) {
 
 export default function FileExplorer({ initialPath = '/', onOpenApp }) {
   const { listDir } = useProjectFS();
+  const { language, t } = useOS();
 
   const [history, setHistory] = useState([initialPath]);
   const [histIdx, setHistIdx] = useState(0);
@@ -144,27 +147,27 @@ export default function FileExplorer({ initialPath = '/', onOpenApp }) {
 
   const sidebarLinks = useMemo(() => [
     ...MEMBERS.map((m) => ({
-      label: m.name,
+      label: language === 'UR' && m.nameUrdu ? m.nameUrdu : m.name,
       path: `/${m.name}`,
       accent: m.accent,
       type: 'member',
     })),
     { sep: true },
     {
-      label: KHILAFAT_WORKS.name,
+      label: language === 'UR' && KHILAFAT_WORKS.nameUrdu ? KHILAFAT_WORKS.nameUrdu : KHILAFAT_WORKS.name,
       path: `/${KHILAFAT_WORKS.name}`,
       accent: KHILAFAT_WORKS.accent,
       type: 'group',
     },
     {
-      label: GALLERY_FOLDER.name,
+      label: language === 'UR' && GALLERY_FOLDER.nameUrdu ? GALLERY_FOLDER.nameUrdu : GALLERY_FOLDER.name,
       path: `/${GALLERY_FOLDER.name}`,
       accent: GALLERY_FOLDER.accent,
       type: 'gallery',
     },
     { sep: true },
-    { label: 'Home', path: '/', type: 'home' },
-  ], []);
+    { label: t('Home'), path: '/', type: 'home' },
+  ], [language, t]);
 
   const selectedEntry = useMemo(() => {
     if (!selected) return null;
@@ -217,7 +220,7 @@ export default function FileExplorer({ initialPath = '/', onOpenApp }) {
           <MdSearch size={16} />
           <input
             className="fe-search-input"
-            placeholder="Search"
+            placeholder={t('Search')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onClick={(e) => e.stopPropagation()}
@@ -262,16 +265,16 @@ export default function FileExplorer({ initialPath = '/', onOpenApp }) {
           <div className="fe-main-content">
             {visibleEntries.length === 0 ? (
               <div className="fe-empty">
-                {searchQuery.trim() ? 'No results found.' : 'This folder is empty.'}
+                {searchQuery.trim() ? t('No Results') : t('Empty Folder')}
               </div>
             ) : viewMode === 'list' ? (
               <table className="fe-list">
                 <thead className="fe-list-header">
                   <tr>
-                    <th style={{ width: '40%' }}>Name</th>
-                    <th style={{ width: '20%' }}>Type</th>
+                    <th style={{ width: '40%' }}>{t('Name')}</th>
+                    <th style={{ width: '20%' }}>{t('Type')}</th>
                     <th style={{ width: '40%' }}>
-                      {currentPath === '/' ? 'Role' : 'Description'}
+                      {currentPath === '/' ? t('Role') : t('Description')}
                     </th>
                   </tr>
                 </thead>
@@ -287,10 +290,10 @@ export default function FileExplorer({ initialPath = '/', onOpenApp }) {
                       <td>
                         <span className="fe-list-cell-name">
                           {entry.type === 'folder' ? <FolderIcon /> : <ProjectIcon type={entry.type} />}
-                          {entry.name}
+                          {language === 'UR' && entry.nameUrdu ? entry.nameUrdu : entry.name}
                         </span>
                       </td>
-                      <td>{entry.type === 'folder' ? 'Member Folder' : entry.projectType || entry.type || 'Project'}</td>
+                      <td>{entry.type === 'folder' ? t('Member Folder') : entry.projectType || (entry.type === 'project' ? t('Project') : entry.type)}</td>
                       <td>{entry.type === 'folder' ? (entry.modified || '') : (entry.description || '')}</td>
                     </tr>
                   ))}
@@ -315,7 +318,7 @@ export default function FileExplorer({ initialPath = '/', onOpenApp }) {
                       {entry.type === 'video' && <div className="fe-grid-play"><MdPlayCircle size={24} /></div>}
                     </div>
                     <div className="fe-grid-label" title={entry.name}>
-                      {entry.name}
+                      {language === 'UR' && entry.nameUrdu ? entry.nameUrdu : entry.name}
                     </div>
                   </div>
                 ))}
@@ -329,7 +332,7 @@ export default function FileExplorer({ initialPath = '/', onOpenApp }) {
                   disabled={currentPage === 1} 
                   onClick={(e) => { e.stopPropagation(); setCurrentPage(p => p - 1); }}
                 ><MdChevronLeft size={20} /></button>
-                <span className="fe-page-text">Page {currentPage} of {totalPages}</span>
+                <span className="fe-page-text">{t('Page')} {currentPage} {t('Of')} {totalPages}</span>
                 <button 
                   className="fe-page-btn" 
                   disabled={currentPage === totalPages} 
@@ -354,12 +357,12 @@ export default function FileExplorer({ initialPath = '/', onOpenApp }) {
                 </div>
               </div>
               <div className="fe-preview-details">
-                <h3 className="fe-preview-title">{selectedEntry.name}</h3>
+                <h3 className="fe-preview-title">{language === 'UR' && selectedEntry.nameUrdu ? selectedEntry.nameUrdu : selectedEntry.name}</h3>
                 <p className="fe-preview-type">{selectedEntry.type.toUpperCase()}</p>
                 {selectedEntry.description && <p className="fe-preview-desc">{selectedEntry.description}</p>}
                 
                 <button className="fe-preview-btn" onClick={() => handleOpen(selectedEntry)}>
-                  Open {selectedEntry.type === 'image' ? 'Image' : 'Video Player'}
+                  {t('Open')} {selectedEntry.type === 'image' ? t('Image Viewer') : selectedEntry.type === 'video' ? t('Video Player') : ''}
                 </button>
               </div>
             </div>
@@ -370,7 +373,7 @@ export default function FileExplorer({ initialPath = '/', onOpenApp }) {
       {/* Status bar */}
       <div className="fe-statusbar">
         <span className="fe-statusbar-panel">
-          {visibleEntries.length} item{visibleEntries.length !== 1 ? 's' : ''}
+          {visibleEntries.length} {visibleEntries.length !== 1 ? t('Items') : t('Item')}
         </span>
         {selected && (
           <span className="fe-statusbar-panel">
