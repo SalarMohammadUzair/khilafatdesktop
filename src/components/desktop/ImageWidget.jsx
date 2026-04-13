@@ -56,7 +56,7 @@ function ImageWidget({ id, defaultX = 100, defaultY = 100, imageUrl, title, widt
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, id]);
 
   return (
     <div
