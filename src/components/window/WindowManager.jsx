@@ -2,16 +2,22 @@ import { useState, useCallback } from 'react';
 import AppWindow from './AppWindow';
 import FileExplorer from '../apps/FileExplorer/FileExplorer';
 import ProjectViewer from '../apps/ProjectViewer/ProjectViewer';
-import { MdFolder, MdLanguage } from 'react-icons/md';
+import ImageViewer from '../apps/ImageViewer/ImageViewer';
+import VideoPlayer from '../apps/VideoPlayer/VideoPlayer';
+import { MdFolder, MdLanguage, MdImage, MdPlayCircle } from 'react-icons/md';
 
 const APP_DEFAULTS = {
   'file-explorer': { width: 820, height: 520, title: 'File Explorer' },
   'project-viewer': { width: 960, height: 640, title: 'Project' },
+  'image-viewer': { width: 800, height: 600, title: 'Image Viewer' },
+  'video-player': { width: 850, height: 480, title: 'Video Player' },
 };
 
 const APP_ICONS = {
   'file-explorer': <MdFolder size={18} color="#f0c040" />,
   'project-viewer': <MdLanguage size={18} color="#89b4fa" />,
+  'image-viewer': <MdImage size={18} color="#f5c2e7" />,
+  'video-player': <MdPlayCircle size={18} color="#f38ba8" />,
 };
 
 export default function WindowManager({
@@ -31,8 +37,11 @@ export default function WindowManager({
     const win = windows[index];
     const defaults = APP_DEFAULTS[win?.appId] || { width: 700, height: 480 };
     const offset = Math.max(0, index) * 28;
+    const x = Math.max(0, (window.innerWidth - defaults.width) / 2) + offset;
+    const y = Math.max(0, (window.innerHeight - 52 - defaults.height) / 2) + offset;
+    
     return {
-      x: 80 + offset, y: 50 + offset,
+      x, y,
       width: defaults.width, height: defaults.height,
     };
   }, [windows]);
@@ -69,14 +78,17 @@ export default function WindowManager({
       {windows.map((win, index) => {
         const defaults = APP_DEFAULTS[win.appId] || { width: 700, height: 480 };
         const offset = index * 28;
+        const xPos = Math.max(0, (window.innerWidth - defaults.width) / 2) + offset;
+        const yPos = Math.max(0, (window.innerHeight - 52 - defaults.height) / 2) + offset;
+        
         const storedGeo = geometry[win.id];
         const geo = storedGeo || (win.startMaximized
           ? {
               ...getMaxRect(),
               isMaximized: true,
-              restoreRect: { x: 80 + offset, y: 50 + offset, width: defaults.width, height: defaults.height },
+              restoreRect: { x: xPos, y: yPos, width: defaults.width, height: defaults.height },
             }
-          : { x: 80 + offset, y: 50 + offset, width: defaults.width, height: defaults.height }
+          : { x: xPos, y: yPos, width: defaults.width, height: defaults.height }
         );
 
         const windowTitle = win.title || defaults.title;
@@ -107,11 +119,18 @@ export default function WindowManager({
             {win.appId === 'file-explorer' && (
               <FileExplorer
                 initialPath={win.initialPath || '/'}
+                onOpenApp={onOpenApp}
                 onOpenProject={(project) => onOpenApp?.('project-viewer', { project })}
               />
             )}
             {win.appId === 'project-viewer' && win.project && (
               <ProjectViewer project={win.project} />
+            )}
+            {win.appId === 'image-viewer' && win.data && (
+              <ImageViewer data={win.data} />
+            )}
+            {win.appId === 'video-player' && win.data && (
+              <VideoPlayer data={win.data} />
             )}
           </AppWindow>
         );

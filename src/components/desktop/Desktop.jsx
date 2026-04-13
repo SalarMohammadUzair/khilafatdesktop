@@ -2,6 +2,7 @@ import { useState, useCallback, memo } from 'react';
 import DesktopIcon from './DesktopIcon';
 import Taskbar from './Taskbar';
 import AjrakBackground from './AjrakBackground';
+import ImageWidget from './ImageWidget';
 import { MEMBERS, KHILAFAT_WORKS } from '../../data/projects';
 import './desktop.css';
 
@@ -10,6 +11,11 @@ import salarFolder from '../../assets/folders/salar.png';
 import grandgamblerFolder from '../../assets/folders/grandgambler.png';
 import shahmanFolder from '../../assets/folders/shahman.png';
 import khilafatworksFolder from '../../assets/folders/khilafatworks.png';
+
+// Widget images (waiting for you to copy them)
+import widget1 from '../../assets/widgets/widget1.jpeg';
+import widget2 from '../../assets/widgets/widget2.jpeg';
+import widget3 from '../../assets/widgets/widget3.jpeg';
 
 const FOLDER_IMAGES = {
   salar: salarFolder,
@@ -61,6 +67,26 @@ function Desktop({ openWindows = [], activeWinId, onOpenApp, onFocus }) {
             />
           ))}
         </div>
+
+        {/* macOS Style Draggable Image Widgets */}
+        <ImageWidget 
+          defaultX={window.innerWidth - 320} 
+          defaultY={40} 
+          imageUrl={widget1} 
+          title="Widget 1" 
+        />
+        <ImageWidget 
+          defaultX={window.innerWidth - 320} 
+          defaultY={340} 
+          imageUrl={widget2} 
+          title="Widget 2" 
+        />
+        <ImageWidget 
+          defaultX={window.innerWidth - 640} 
+          defaultY={40} 
+          imageUrl={widget3} 
+          title="Widget 3" 
+        />
       </div>
 
       <Taskbar

@@ -1,22 +1,36 @@
 import { useMemo, useCallback } from 'react';
-import { MEMBERS, KHILAFAT_WORKS, PROJECTS } from '../data/projects';
+import { MEMBERS, KHILAFAT_WORKS, PROJECTS, GALLERY_FOLDER, GALLERY_SUBFOLDERS, GALLERY_FILES } from '../data/projects';
 
-// All "folder owners" — members + group folder
-const ALL_FOLDERS = [...MEMBERS, KHILAFAT_WORKS];
+// All "folder owners" — members + group folder + gallery
+const ALL_FOLDERS = [...MEMBERS, KHILAFAT_WORKS, GALLERY_FOLDER];
 
 export default function useProjectFS() {
   const fs = useMemo(() => {
     const tree = {
+      // Root Directory
       '/': ALL_FOLDERS.map((f) => ({
         id: f.id,
         name: f.name,
         type: 'folder',
-        modified: f.id === 'khilafatworks' ? 'Group' : 'Member',
+        modified: f.id === 'khilafatworks' ? 'Group' : f.id === 'gallery' ? 'Gallery' : 'Member',
         accent: f.accent,
       })),
+      
+      // Gallery Root Directory
+      [`/${GALLERY_FOLDER.name}`]: GALLERY_SUBFOLDERS.map((sub) => ({
+        id: sub.id,
+        name: sub.name,
+        type: 'folder',
+        modified: 'Gallery Subfolder',
+        accent: sub.accent,
+      }))
     };
 
+    // Member and Group Folders (Depth 1)
     ALL_FOLDERS.forEach((f) => {
+      // Don't process Gallery again here
+      if (f.id === 'gallery') return;
+      
       const folderProjects = PROJECTS.filter((p) => p.memberId === f.id);
       tree[`/${f.name}`] = folderProjects.map((p) => ({
         id: p.id,
@@ -26,6 +40,21 @@ export default function useProjectFS() {
         description: p.description,
         url: p.url,
         modified: p.date,
+      }));
+    });
+
+    // Gallery Subfolders (Depth 2)
+    GALLERY_SUBFOLDERS.forEach((sub) => {
+      const path = `/Gallery/${sub.name}`;
+      const subFolderFiles = GALLERY_FILES.filter((f) => f.parentPath === path);
+      tree[path] = subFolderFiles.map((file) => ({
+        id: file.id,
+        name: file.name,
+        type: file.type,
+        url: file.url,
+        youtubeId: file.youtubeId,
+        description: file.description,
+        modified: file.date,
       }));
     });
 

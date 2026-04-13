@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import useProjectFS from '../../../hooks/useProjectFS';
-import { MEMBERS, KHILAFAT_WORKS } from '../../../data/projects';
-import { MdArrowBack, MdArrowForward, MdArrowUpward, MdHome, MdSearch, MdPerson, MdWorkspaces } from 'react-icons/md';
+import { MEMBERS, KHILAFAT_WORKS, GALLERY_FOLDER } from '../../../data/projects';
+import { MdArrowBack, MdArrowForward, MdArrowUpward, MdHome, MdSearch, MdPerson, MdWorkspaces, MdPhotoLibrary, MdImage, MdPlayCircle, MdViewList, MdViewModule, MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import './FileExplorer.css';
 
 function FolderIcon({ size = 16 }) {
@@ -12,7 +12,9 @@ function FolderIcon({ size = 16 }) {
   );
 }
 
-function ProjectIcon({ size = 16 }) {
+function ProjectIcon({ type, size = 16 }) {
+  if (type === 'image') return <MdImage size={size} color="#a6e3a1" />;
+  if (type === 'video') return <MdPlayCircle size={size} color="#f38ba8" />;
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <rect x="3" y="3" width="18" height="18" rx="3" fill="#89b4fa" />
@@ -64,7 +66,7 @@ function Breadcrumb({ currentPath, onNavigate }) {
   );
 }
 
-export default function FileExplorer({ initialPath = '/', onOpenProject }) {
+export default function FileExplorer({ initialPath = '/', onOpenApp }) {
   const { listDir } = useProjectFS();
 
   const [history, setHistory] = useState([initialPath]);
@@ -74,8 +76,17 @@ export default function FileExplorer({ initialPath = '/', onOpenProject }) {
   const [selected, setSelected] = useState(null);
   const [addrFocused, setAddrFocused] = useState(false);
   const [addrInput, setAddrInput] = useState(initialPath);
+  
+  // Pagination & View Mode
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 80;
+  const [userViewMode, setUserViewMode] = useState(null);
 
-  useEffect(() => setAddrInput(currentPath), [currentPath]);
+  useEffect(() => {
+    setAddrInput(currentPath);
+    setCurrentPage(1); // reset to page 1 on navigate
+    setUserViewMode(null); // allow defaults to take over
+  }, [currentPath]);
 
   const navigate = useCallback((path) => {
     setHistory((prev) => [...prev.slice(0, histIdx + 1), path]);
@@ -96,12 +107,24 @@ export default function FileExplorer({ initialPath = '/', onOpenProject }) {
     if (!entry) return;
     if (entry.type === 'folder') {
       navigate((currentPath === '/' ? '' : currentPath) + '/' + entry.name);
-      return;
+    } else if (entry.type === 'project') {
+      onOpenApp?.('project-viewer', { project: entry });
+    } else if (entry.type === 'image') {
+      onOpenApp?.('image-viewer', { data: entry });
+    } else if (entry.type === 'video') {
+      onOpenApp?.('video-player', { data: entry });
     }
-    if (entry.type === 'project') {
-      onOpenProject?.(entry);
+  }, [currentPath, navigate, onOpenApp]);
+
+  const handleAuxClick = useCallback((e, entry) => {
+    if (e.button === 1 && entry?.type === 'folder') {
+      e.preventDefault();
+      e.stopPropagation();
+      onOpenApp?.('file-explorer', {
+        initialPath: (currentPath === '/' ? '' : currentPath) + '/' + entry.name
+      });
     }
-  }, [currentPath, navigate, onOpenProject]);
+  }, [currentPath, onOpenApp]);
 
   const entries = listDir(currentPath);
   const visibleEntries = useMemo(() => {
@@ -109,6 +132,15 @@ export default function FileExplorer({ initialPath = '/', onOpenProject }) {
     if (!q) return entries;
     return entries.filter((e) => e.name.toLowerCase().includes(q));
   }, [entries, searchQuery]);
+
+  // Derived state for ViewMode and Pagination
+  const viewMode = userViewMode || (currentPath.includes('Gallery') ? 'grid' : 'list');
+  const totalPages = Math.ceil(visibleEntries.length / itemsPerPage);
+  
+  const paginatedEntries = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return visibleEntries.slice(start, start + itemsPerPage);
+  }, [visibleEntries, currentPage, itemsPerPage]);
 
   const sidebarLinks = useMemo(() => [
     ...MEMBERS.map((m) => ({
@@ -124,9 +156,20 @@ export default function FileExplorer({ initialPath = '/', onOpenProject }) {
       accent: KHILAFAT_WORKS.accent,
       type: 'group',
     },
+    {
+      label: GALLERY_FOLDER.name,
+      path: `/${GALLERY_FOLDER.name}`,
+      accent: GALLERY_FOLDER.accent,
+      type: 'gallery',
+    },
     { sep: true },
     { label: 'Home', path: '/', type: 'home' },
   ], []);
+
+  const selectedEntry = useMemo(() => {
+    if (!selected) return null;
+    return visibleEntries.find(e => e.id === selected) || null;
+  }, [selected, visibleEntries]);
 
   return (
     <div className="fe-shell" onClick={() => setSelected(null)}>
@@ -165,6 +208,11 @@ export default function FileExplorer({ initialPath = '/', onOpenProject }) {
           )}
         </div>
 
+        <div className="fe-view-toggles">
+          <button className={`fe-view-btn ${viewMode === 'list' ? 'is-active' : ''}`} onClick={() => setUserViewMode('list')} title="List View"><MdViewList size={18}/></button>
+          <button className={`fe-view-btn ${viewMode === 'grid' ? 'is-active' : ''}`} onClick={() => setUserViewMode('grid')} title="Grid View"><MdViewModule size={18}/></button>
+        </div>
+
         <div className="fe-search-wrap">
           <MdSearch size={16} />
           <input
@@ -197,6 +245,8 @@ export default function FileExplorer({ initialPath = '/', onOpenProject }) {
                       <MemberIcon accent={item.accent} size={18} />
                     ) : item.type === 'group' ? (
                       <MdWorkspaces size={16} color={item.accent} />
+                    ) : item.type === 'gallery' ? (
+                      <MdPhotoLibrary size={16} color={item.accent} />
                     ) : (
                       <MdHome size={16} color="#f58b2e" />
                     )}
@@ -209,41 +259,110 @@ export default function FileExplorer({ initialPath = '/', onOpenProject }) {
         </div>
 
         <div className="fe-main" onClick={(e) => { e.stopPropagation(); setSelected(null); }}>
-          {visibleEntries.length === 0 ? (
-            <div className="fe-empty">
-              {searchQuery.trim() ? 'No results found.' : 'This folder is empty.'}
-            </div>
-          ) : (
-            <table className="fe-list">
-              <thead className="fe-list-header">
-                <tr>
-                  <th style={{ width: '40%' }}>Name</th>
-                  <th style={{ width: '20%' }}>Type</th>
-                  <th style={{ width: '40%' }}>
-                    {currentPath === '/' ? 'Role' : 'Description'}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {visibleEntries.map((entry) => (
-                  <tr
+          <div className="fe-main-content">
+            {visibleEntries.length === 0 ? (
+              <div className="fe-empty">
+                {searchQuery.trim() ? 'No results found.' : 'This folder is empty.'}
+              </div>
+            ) : viewMode === 'list' ? (
+              <table className="fe-list">
+                <thead className="fe-list-header">
+                  <tr>
+                    <th style={{ width: '40%' }}>Name</th>
+                    <th style={{ width: '20%' }}>Type</th>
+                    <th style={{ width: '40%' }}>
+                      {currentPath === '/' ? 'Role' : 'Description'}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedEntries.map((entry) => (
+                    <tr
+                      key={entry.id}
+                      className={`fe-list-row${selected === entry.id ? ' is-selected' : ''}`}
+                      onClick={(e) => { e.stopPropagation(); setSelected(entry.id); }}
+                      onDoubleClick={() => handleOpen(entry)}
+                      onMouseUp={(e) => { if (e.button === 1) handleAuxClick(e, entry); }}
+                    >
+                      <td>
+                        <span className="fe-list-cell-name">
+                          {entry.type === 'folder' ? <FolderIcon /> : <ProjectIcon type={entry.type} />}
+                          {entry.name}
+                        </span>
+                      </td>
+                      <td>{entry.type === 'folder' ? 'Member Folder' : entry.projectType || entry.type || 'Project'}</td>
+                      <td>{entry.type === 'folder' ? (entry.modified || '') : (entry.description || '')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="fe-grid">
+                {paginatedEntries.map((entry) => (
+                  <div
                     key={entry.id}
-                    className={`fe-list-row${selected === entry.id ? ' is-selected' : ''}`}
+                    className={`fe-grid-item${selected === entry.id ? ' is-selected' : ''}`}
                     onClick={(e) => { e.stopPropagation(); setSelected(entry.id); }}
                     onDoubleClick={() => handleOpen(entry)}
+                    onMouseUp={(e) => { if (e.button === 1) handleAuxClick(e, entry); }}
                   >
-                    <td>
-                      <span className="fe-list-cell-name">
-                        {entry.type === 'folder' ? <FolderIcon /> : <ProjectIcon />}
-                        {entry.name}
-                      </span>
-                    </td>
-                    <td>{entry.type === 'folder' ? 'Member Folder' : entry.projectType || 'Project'}</td>
-                    <td>{entry.type === 'folder' ? (entry.modified || '') : (entry.description || '')}</td>
-                  </tr>
+                    <div className="fe-grid-thumb">
+                      {entry.type === 'image' && <img src={entry.url} alt="" />}
+                      {entry.type === 'video' && entry.youtubeId && <img src={`https://img.youtube.com/vi/${entry.youtubeId}/mqdefault.jpg`} alt="" />}
+                      {entry.type === 'folder' && <FolderIcon size={48} />}
+                      {entry.type !== 'image' && entry.type !== 'video' && entry.type !== 'folder' && <ProjectIcon type={entry.type} size={48} />}
+                      
+                      {entry.type === 'video' && <div className="fe-grid-play"><MdPlayCircle size={24} /></div>}
+                    </div>
+                    <div className="fe-grid-label" title={entry.name}>
+                      {entry.name}
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            )}
+            
+            {totalPages > 1 && (
+              <div className="fe-pagination">
+                <button 
+                  className="fe-page-btn" 
+                  disabled={currentPage === 1} 
+                  onClick={(e) => { e.stopPropagation(); setCurrentPage(p => p - 1); }}
+                ><MdChevronLeft size={20} /></button>
+                <span className="fe-page-text">Page {currentPage} of {totalPages}</span>
+                <button 
+                  className="fe-page-btn" 
+                  disabled={currentPage === totalPages} 
+                  onClick={(e) => { e.stopPropagation(); setCurrentPage(p => p + 1); }}
+                ><MdChevronRight size={20} /></button>
+              </div>
+            )}
+          </div>
+          
+          {/* Right Handle Preview Pane */}
+          {selectedEntry && (selectedEntry.type === 'image' || selectedEntry.type === 'video') && (
+            <div className="fe-preview-pane">
+              <div className="fe-preview-thumb-container">
+                {selectedEntry.type === 'image' && (
+                  <img src={selectedEntry.url} alt={selectedEntry.name} className="fe-preview-img" />
+                )}
+                {selectedEntry.type === 'video' && (
+                  <img src={`https://img.youtube.com/vi/${selectedEntry.youtubeId}/hqdefault.jpg`} alt={selectedEntry.name} className="fe-preview-img" />
+                )}
+                <div className="fe-preview-icon">
+                  {selectedEntry.type === 'image' ? <MdImage size={32} /> : <MdPlayCircle size={32} />}
+                </div>
+              </div>
+              <div className="fe-preview-details">
+                <h3 className="fe-preview-title">{selectedEntry.name}</h3>
+                <p className="fe-preview-type">{selectedEntry.type.toUpperCase()}</p>
+                {selectedEntry.description && <p className="fe-preview-desc">{selectedEntry.description}</p>}
+                
+                <button className="fe-preview-btn" onClick={() => handleOpen(selectedEntry)}>
+                  Open {selectedEntry.type === 'image' ? 'Image' : 'Video Player'}
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>

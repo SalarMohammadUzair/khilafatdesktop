@@ -1,3 +1,5 @@
+import { DR_ISRAR_VIDEOS } from './drIsrarVideos';
+
 // Khilafat Members 
 export const MEMBERS = [
   {
@@ -33,6 +35,44 @@ export const KHILAFAT_WORKS = {
   accent: '#f9e2af',
   folderImage: 'khilafatworks',
 };
+
+// Gallery (top level group)
+export const GALLERY_FOLDER = {
+  id: 'gallery',
+  name: 'Gallery',
+  accent: '#cba6f7', // purple accent
+};
+
+// Subfolders inside Gallery
+export const GALLERY_SUBFOLDERS = [
+  { id: 'iqbal', name: 'Allama Iqbal', parent: 'Gallery', accent: '#a6e3a1' },
+  { id: 'salam', name: 'AbdusSalam', parent: 'Gallery', accent: '#89b4fa' },
+  { id: 'israr', name: 'Dr Israr', parent: 'Gallery', accent: '#f5c2e7' },
+];
+
+// Media Files inside the Gallery subfolders
+export const GALLERY_FILES = [
+  // Allama Iqbal Images
+  { id: 'iqbal-0', parentPath: '/Gallery/Allama Iqbal', name: 'Iqbal 0', type: 'image', url: '/gallery/Iqbal0 (2).jpg', date: '2026-04-14' },
+  { id: 'iqbal-1', parentPath: '/Gallery/Allama Iqbal', name: 'Iqbal 1', type: 'image', url: '/gallery/Iqbal1 (2).jpg', date: '2026-04-14' },
+  { id: 'iqbal-2', parentPath: '/Gallery/Allama Iqbal', name: 'Iqbal 2', type: 'image', url: '/gallery/Iqbal2 (2).jpg', date: '2026-04-14' },
+  { id: 'iqbal-3', parentPath: '/Gallery/Allama Iqbal', name: 'Iqbal 3', type: 'image', url: '/gallery/Iqbal3 (2).jpg', date: '2026-04-14' },
+  { id: 'iqbal-4', parentPath: '/Gallery/Allama Iqbal', name: 'Iqbal 4', type: 'image', url: '/gallery/Iqbal4 (2).jpg', date: '2026-04-14' },
+  { id: 'iqbal-5', parentPath: '/Gallery/Allama Iqbal', name: 'Iqbal 5', type: 'image', url: '/gallery/Iqbal5 (2).jpg', date: '2026-04-14' },
+  { id: 'iqbal-6', parentPath: '/Gallery/Allama Iqbal', name: 'Iqbal 6', type: 'image', url: '/gallery/Iqbal6.jpg', date: '2026-04-14' },
+  { id: 'iqbal-7', parentPath: '/Gallery/Allama Iqbal', name: 'Iqbal 7', type: 'image', url: '/gallery/Iqbal7.jpg', date: '2026-04-14' },
+
+  // AbdusSalam Images
+  { id: 'salam-0', parentPath: '/Gallery/AbdusSalam', name: 'AbdusSalam 0', type: 'image', url: '/gallery/abdussalam0.jpg', date: '2026-04-14' },
+  { id: 'salam-1', parentPath: '/Gallery/AbdusSalam', name: 'AbdusSalam 1', type: 'image', url: '/gallery/abdussalam1.jpg', date: '2026-04-14' },
+  { id: 'salam-2', parentPath: '/Gallery/AbdusSalam', name: 'AbdusSalam 2', type: 'image', url: '/gallery/abdussalam2.jpg', date: '2026-04-14' },
+  { id: 'salam-3', parentPath: '/Gallery/AbdusSalam', name: 'AbdusSalam 3', type: 'image', url: '/gallery/abdussalam3.jpg', date: '2026-04-14' },
+  { id: 'salam-4', parentPath: '/Gallery/AbdusSalam', name: 'AbdusSalam 4', type: 'image', url: '/gallery/abdussalam4.jpg', date: '2026-04-14' },
+  { id: 'salam-5', parentPath: '/Gallery/AbdusSalam', name: 'AbdusSalam 5', type: 'image', url: '/gallery/abdussalam5.jpg', date: '2026-04-14' },
+
+  // Dr Israr Videos imported from our generated file, sorted chronologically from the start!
+  ...[...DR_ISRAR_VIDEOS].reverse()
+];
 
 // Projects 
 export const PROJECTS = [

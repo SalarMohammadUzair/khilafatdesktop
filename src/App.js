@@ -17,9 +17,10 @@ function App() {
       startMaximized: appId === 'project-viewer',
       title: appId === 'file-explorer'
         ? 'File Explorer'
-        : launchData?.project?.name || 'Project',
+        : launchData?.project?.name || launchData?.data?.name || (appId === 'image-viewer' ? 'Image Viewer' : appId === 'video-player' ? 'Video Player' : 'App'),
       initialPath: launchData?.initialPath || '/',
       project: launchData?.project || null,
+      data: launchData?.data || null,
       faviconUrl: launchData?.project?.url
         ? `https://www.google.com/s2/favicons?domain=${new URL(launchData.project.url).hostname}&sz=32`
         : null,

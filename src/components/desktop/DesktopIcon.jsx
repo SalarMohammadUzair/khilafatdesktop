@@ -7,6 +7,7 @@ function DesktopIcon({ id, label, icon, selected, onSelect, onOpen, style }) {
       style={style}
       onClick={(e) => { e.stopPropagation(); onSelect?.(id); }}
       onDoubleClick={() => onOpen?.()}
+      onMouseUp={(e) => { if (e.button === 1) onOpen?.(); }}
     >
       <div className="desktop-icon-img">{icon}</div>
       <span className="desktop-icon-label">{label}</span>
